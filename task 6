@@ -1,0 +1,90 @@
+import os
+
+# Sample product data
+PRODUCTS = [
+    {"id": 1, "name": "Laptop", "price": 800, "stock": 5},
+    {"id": 2, "name": "Smartphone", "price": 500, "stock": 10},
+    {"id": 3, "name": "Headphones", "price": 100, "stock": 20},
+    {"id": 4, "name": "Smartwatch", "price": 200, "stock": 15},
+]
+
+# Cart data
+cart = []
+
+# Clear screen utility
+def clear_screen():
+    os.system("cls" if os.name == "nt" else "clear")
+
+# Display available products
+def display_products():
+    clear_screen()
+    print("🛒 Welcome to the Online Shopping Platform 🛒\n")
+    print("Available Products:")
+    print("-" * 40)
+    for product in PRODUCTS:
+        print(
+            f"ID: {product['id']} | {product['name']} | Price: ${product['price']} | Stock: {product['stock']}"
+        )
+    print("-" * 40)
+
+# Add a product to the cart
+def add_to_cart():
+    try:
+        product_id = int(input("Enter the Product ID to add to your cart: "))
+        quantity = int(input("Enter the quantity: "))
+        product = next((p for p in PRODUCTS if p["id"] == product_id), None)
+        if product and product["stock"] >= quantity:
+            cart.append({"name": product["name"], "price": product["price"], "quantity": quantity})
+            product["stock"] -= quantity
+            print(f"\n✔️ {quantity} x {product['name']} added to the cart.")
+        else:
+            print("\n❌ Invalid Product ID or insufficient stock.")
+    except ValueError:
+        print("\n❌ Please enter valid numbers.")
+
+# View cart and calculate total
+def view_cart():
+    clear_screen()
+    if not cart:
+        print("🛒 Your cart is empty!")
+    else:
+        print("🛒 Your Cart:")
+        print("-" * 40)
+        total = 0
+        for item in cart:
+            cost = item["price"] * item["quantity"]
+            print(f"{item['name']} | Quantity: {item['quantity']} | Total: ${cost}")
+            total += cost
+        print("-" * 40)
+        print(f"Total Amount: ${total}")
+    input("\nPress Enter to return to the menu.")
+
+# Main menu
+def main_menu():
+    while True:
+        clear_screen()
+        print("🛍️ Online Shopping Platform 🛍️")
+        print("1. View Products")
+        print("2. Add to Cart")
+        print("3. View Cart")
+        print("4. Exit")
+        choice = input("Select an option (1-4): ")
+
+        if choice == "1":
+            display_products()
+        elif choice == "2":
+            display_products()
+            add_to_cart()
+        elif choice == "3":
+            view_cart()
+        elif choice == "4":
+            print("\nThank you for shopping with us. Goodbye! 👋")
+            break
+        else:
+            print("\n❌ Invalid choice. Please try again.")
+
+        input("\nPress Enter to continue...")
+
+# Run the program
+if __name__ == "__main__":
+    main_menu()
